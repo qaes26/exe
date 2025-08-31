@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفصل الرابع: اختيار العينة - قيس طلال الجازي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff; /* Blue */
+            --secondary-color: #17a2b8; /* Cyan */
+            --accent-color: #28a745; /* Green */
+            --text-color: #343a40;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            line-height: 1.9;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            direction: rtl; /* Ensure right-to-left for Arabic */
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-light);
+            transition: all 0.3s ease;
+        }
+        .container:hover {
+            box-shadow: 0 15px 40px var(--shadow-medium);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+        header p {
+            font-size: 1.3em;
+            color: #6c757d;
+            margin-top: 20px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            text-align: right;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            font-size: 2em;
+        }
+        h3 {
+            color: var(--secondary-color);
+            margin-top: 30px;
+            font-size: 1.5em;
+            border-right: 4px solid var(--accent-color);
+            padding-right: 10px;
+        }
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            text-align: justify;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        ul li {
+            background-color: #eef7ff;
+            border-right: 5px solid var(--primary-color);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-size: 1.05em;
+        }
+        ul li:hover {
+            background-color: #e0efff;
+            border-right-color: var(--secondary-color);
+            transform: translateX(-5px);
+        }
+        ul ul {
+            margin-top: 10px;
+            margin-right: 20px;
+            border-right: none;
+            box-shadow: none;
+        }
+        ul ul li {
+            background-color: #f5fafd;
+            border-right: 3px solid var(--accent-color);
+            font-size: 1em;
+        }
+        ul ul li:hover {
+            background-color: #edf5fc;
+            border-right-color: var(--primary-color);
+        }
+
+        /* Tree Diagram Styles */
+        .tree-container {
+            text-align: center;
+            padding: 30px 0;
+            background-color: #f1f7fc;
+            border-radius: 10px;
+            margin-top: 40px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
+            overflow-x: auto; /* Allow horizontal scrolling for wide trees */
+        }
+        .tree {
+            display: inline-block; /* To center the tree if it's not full width */
+            padding: 20px;
+            min-width: 800px; /* Ensure enough space for the tree layout */
+        }
+        .tree ul {
+            padding-top: 20px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            list-style: none;
+        }
+        .tree li {
+            flex-grow: 1;
+            text-align: center;
+            list-style-type: none;
+            position: relative;
+            padding: 30px 5px 0 5px; /* Adjust padding for spacing */
+            margin: 0 5px; /* Margin between nodes */
+            display: inline-block; /* For better control of spacing */
+        }
+
+        /* Vertical Line from parent to child */
+        .tree li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-right: 2px solid #ccc;
+            width: 0;
+            height: 30px; /* Length of vertical line */
+            transform: translateX(-1px);
+        }
+
+        /* Horizontal line connecting siblings */
+        .tree li::after {
+            content: '';
+            position: absolute;
+            top: 30px; /* Where horizontal line starts */
+            left: 0;
+            border-top: 2px solid #ccc;
+            width: 100%;
+            height: 0;
+        }
+
+        /* Remove extra lines for first/last/only children */
+        .tree li:first-child::after { border-top: none; } /* No line left from first child */
+        .tree li:last-child::after { border-top: none; } /* No line right from last child */
+        .tree li:only-child::before, .tree li:only-child::after {
+             border: none;
+        }
+
+        .tree li:first-child:not(:only-child)::after {
+            width: 50%;
+            left: 50%;
+            border-left: 2px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 0 5px;
+        }
+        .tree li:last-child:not(:only-child)::after {
+            width: 50%;
+            border-right: 2px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 5px 0;
+        }
+
+        /* Connectors for deeper levels */
+        .tree ul ul::before {
+            content: '';
+            position: absolute;
+            top: -20px; /* Adjust to connect to parent */
+            left: 50%;
+            transform: translateX(-1px);
+            border-right: 2px solid #ccc;
+            width: 0;
+            height: 20px; /* Length of vertical line to connect levels */
+        }
+        
+        .tree li span {
+            border: 2px solid #d4e3f4;
+            padding: 15px 25px;
+            text-decoration: none;
+            color: var(--text-color);
+            display: inline-block;
+            border-radius: 10px;
+            background-color: var(--card-bg);
+            min-width: 180px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px var(--shadow-light);
+            font-weight: bold;
+            font-size: 1.1em;
+            line-height: 1.3;
+        }
+        .tree li span:hover {
+            background: #e6f2ff;
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 6px 15px var(--shadow-medium);
+        }
+        
+        /* Specific node styling */
+        .tree li span.main-node {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: #0056b3;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+            font-size: 1.3em;
+            min-width: 250px;
+        }
+        .tree li span.level-2-node {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: #117a8b;
+            box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+            font-size: 1.2em;
+        }
+        .tree li span.level-3-node {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: #1e7e34;
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+            font-size: 1.15em;
+        }
+        .tree li span.leaf-node {
+            background-color: #ffe0b2; /* Lighter orange/yellow */
+            color: var(--text-color);
+            border-color: #ffc107;
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+            font-size: 1em;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            header h1 {
+                font-size: 2em;
+            }
+            header p {
+                font-size: 1em;
+            }
+            h2 {
+                font-size: 1.6em;
+            }
+            h3 {
+                font-size: 1.3em;
+            }
+            p, ul li {
+                font-size: 0.95em;
+            }
+            .tree li span {
+                min-width: 120px;
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
+            .tree li span.main-node {
+                font-size: 1.1em;
+                min-width: 200px;
+            }
+            .tree li span.level-2-node {
+                font-size: 1em;
+            }
+            .tree-container {
+                padding: 15px 0;
+            }
+            .tree ul {
+                flex-wrap: wrap; /* Allow items to wrap for smaller screens */
+            }
+            .tree li {
+                width: 100%; /* Make each node take full width */
+                margin: 10px 0;
+            }
+            .tree li::before, .tree li::after, .tree ul ul::before {
+                display: none; /* Hide complex lines on small screens */
+            }
+            .tree li span {
+                width: calc(100% - 20px); /* Adjust for padding */
+                margin: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>الفصل الرابع: اختيار العينة في البحث العلمي</h1>
+            <p><strong>إعداد وتقديم الطالب: قيس طلال الجازي</strong></p>
+        </header>
+
+        <h2>مقدمة</h2>
+        <p>في البحث العلمي، غالباً ما يكون من المستحيل أو غير العملي دراسة جميع أفراد المجتمع الإحصائي (Population) بسبب كبر حجمه، التكلفة، أو الوقت المستغرق. لذلك، يلجأ الباحثون إلى اختيار جزء صغير من هذا المجتمع يسمى <strong>العينة (Sample)</strong>، على أن تكون هذه العينة ممثلة للمجتمع الأصلي ليمكن تعميم النتائج عليها. الهدف الأساسي هو الحصول على معلومات دقيقة وموثوقة عن المجتمع دون الحاجة لدراسته بالكامل.</p>
+
+        <h2>1. تعريفات ومفاهيم أساسية</h2>
+        <ul>
+            <li><strong>المجتمع الإحصائي (Population):</strong> هو جميع الأفراد أو العناصر التي يرغب الباحث في دراستها والتي تشترك في خاصية أو عدة خصائص معينة.</li>
+            <li><strong>العينة (Sample):</strong> هي جزء أو مجموعة فرعية من المجتمع الإحصائي يتم اختيارها بطريقة معينة لتمثل المجتمع وتُجرى عليها الدراسة.</li>
+            <li><strong>وحدة المعاينة (Sampling Unit):</strong> هي العنصر الأساسي الذي يتم اختياره من المجتمع، وقد يكون فرداً، أسرة، شركة، أو أي وحدة أخرى.</li>
+            <li><strong>إطار المعاينة (Sampling Frame):</strong> هو القائمة الفعلية أو السجل الذي يحتوي على جميع وحدات المجتمع التي يمكن سحب العينة منها.</li>
+        </ul>
+
+        <h2>2. أهمية استخدام العينات في البحث العلمي</h2>
+        <ul>
+            <li><strong>توفير الوقت والجهد:</strong> جمع البيانات من مجتمع كامل يستغرق وقتاً وجهداً هائلين، بينما العينة تختصر ذلك.</li>
+            <li><strong>تخفيض التكاليف:</strong> دراسة عينة أقل تكلفة بكثير من دراسة مجتمع كامل.</li>
+            <li><strong>استحالة دراسة المجتمع بأكمله:</strong> في بعض الحالات، يكون المجتمع كبيراً جداً بحيث يستحيل عملياً دراسته بالكامل.</li>
+            <li><strong>الحصول على دقة أكبر في البيانات:</strong> قد يؤدي التركيز على عينة صغيرة إلى جمع بيانات أكثر عمقاً ودقة، والتقليل من الأخطاء غير المتعلقة بالمعاينة.</li>
+            <li><strong>اختبارات تدميرية:</strong> في بعض الأحيان، تتطلب الدراسة تدمير الوحدات قيد البحث، وهنا يكون استخدام العينات ضرورياً.</li>
+        </ul>
+
+        <h2>3. أنواع أخطاء المعاينة</h2>
+        <ul>
+            <li><strong>أخطاء المعاينة (Sampling Errors):</strong> تحدث نتيجة للصدفة في اختيار العينة، وهي الفرق بين قيمة المعلمة الحقيقية للمجتمع والقيمة المقدرة من العينة.</li>
+            <li><strong>الأخطاء غير المتعلقة بالمعاينة (Non-Sampling Errors):</strong> هي الأخطاء التي تحدث في أي مرحلة من مراحل البحث بخلاف عملية اختيار العينة (مثل: أخطاء في التصميم، جمع البيانات، عدم الاستجابة).</li>
+        </ul>
+
+        <h2>4. تصميم العينات (Sampling Design)</h2>
+        <div class="tree-container">
+            <div class="tree">
+                <ul>
+                    <li>
+                        <span class="main-node">تصميم المعاينة</span>
+                        <ul>
+                            <li>
+                                <span class="level-2-node">المعاينة الاحتمالية</span>
+                                <ul>
+                                    <li>
+                                        <span class="level-3-node">غير المقيدة</span>
+                                        <ul>
+                                            <li><span class="leaf-node">العشوائية البسيطة</span></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <span class="level-3-node">المقيدة</span>
+                                        <ul>
+                                            <li><span class="leaf-node">المنتظمة</span></li>
+                                            <li><span class="leaf-node">الطبقية</span></li>
+                                            <li><span class="leaf-node">العنقودية</span></li>
+                                            <li><span class="leaf-node">المضاعفة</span></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="level-2-node">المعاينة غير الاحتمالية</span>
+                                <ul>
+                                    <li><span class="leaf-node">الميسّرة</span></li>
+                                    <li><span class="leaf-node">الهادفة</span></li>
+                                    <li><span class="leaf-node">الحصصية</span></li>
+                                    <li><span class="leaf-node">كرة الثلج</span></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 50px;">أ. المعاينة الاحتمالية (Probability Sampling)</h3>
+        <p>هي الطريقة التي يكون فيها لكل فرد أو عنصر في مجتمع الدراسة فرصة <strong>معروفة وغير صفرية</strong> للاختيار ضمن العينة. يمكن تعميم النتائج على المجتمع الأصلي.</p>
+        <h4>1. المعاينة غير المقيدة (Unrestricted Sampling)</h4>
+        <ul>
+            <li><strong>العينة العشوائية البسيطة (Simple Random Sample):</strong> يتم اختيار المفردات بطريقة عشوائية تامة، لكل وحدة فرصة متساوية ومستقلة.</li>
+        </ul>
+        <h4>2. المعاينة المقيدة (Restricted Sampling)</h4>
+        <ul>
+            <li><strong>العينة المنتظمة (Systematic Sample):</strong> يتم الاختيار بشكل منهجي ومنظم بعد تحديد فترة الانتظام (K).</li>
+            <li><strong>العينة الطبقية (Stratified Sample):</strong> تقسيم المجتمع إلى طبقات متجانسة وسحب عينة من كل طبقة (متساوية أو متناسبة).</li>
+            <li><strong>العينة العنقودية (Cluster Sample):</strong> تُستخدم عندما يكون المجتمع على شكل تجمعات (عناقيد)، يتم اختيار العناقيد ثم دراسة أفرادها.</li>
+            <li><strong>العينة المضاعفة (Double Sample):</strong> سحب عينة إضافية (ثانية) عندما تكون العينة الأولية غير كافية.</li>
+        </ul>
+
+        <h3 style="margin-top: 50px;">ب. المعاينة غير الاحتمالية (Non-probability Sampling)</h3>
+        <p>في هذا النوع، لا تكون لكل وحدة في المجتمع فرصة معروفة للاختيار، بل يتم الاختيار بناءً على <strong>حكم الباحث الشخصي، سهولة الوصول، أو أغراض محددة للدراسة</strong>. لا يمكن تعميم النتائج.</p>
+        <ul>
+            <li><strong>العينة الميسّرة / الملائمة (Convenience Sample):</strong> يتم الاختيار بناءً على سهولة الوصول والتوافر.</li>
+            <li><strong>العينة الهادفة / القصدية (Purposive Sample):</strong> يختار الباحث الأفراد لأنه يعتقد أنهم يمتلكون معلومات مهمة.</li>
+            <li><strong>العينة الحصصية (Quota Sample):</strong> تقسيم المجتمع إلى فئات واختيار عدد محدد (حصة) من كل فئة بطريقة غير عشوائية.</li>
+            <li><strong>عينة كرة الثلج (Snowball Sample):</strong> تبدأ بعدد محدود ثم يطلب منهم ترشيح آخرين، تُستخدم للمجتمعات صعبة الوصول.</li>
+        </ul>
+
+    </div>
+</body>
+</html>
